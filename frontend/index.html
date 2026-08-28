@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stream Analytics Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Memory-Efficient Stream Analytics Engine</h1>
+        <p>Real-Time Prediction & Anomaly Detection Dashboard</p>
+        <p id="health">Checking backend health...</p>
+        <a href="http://127.0.0.1:8000/" target="_blank" rel="noreferrer">Open backend status</a>
+    </header>
+
+
+    <main>
+
+        <!-- Status -->
+        <div class="status-card">
+            <h2>System Status</h2>
+            <p id="status">Dashboard stopped</p>
+            <p id="dashboard-status">Dashboard stopped</p>
+            <button id="start-dashboard" type="button">Start</button>
+            <button id="stop-dashboard" type="button">Stop</button>
+            <button id="clear-history" type="button">Clear History</button>
+        </div>
+
+
+        <!-- Data Cards -->
+        <section class="cards">
+
+            <div class="card">
+                <h3>CPU Usage</h3>
+                <p id="cpu">--</p>
+            </div>
+
+            <div class="card">
+                <h3>RAM Usage</h3>
+                <p id="ram">--</p>
+            </div>
+
+            <div class="card">
+                <h3>Network Usage</h3>
+                <p id="network">--</p>
+            </div>
+
+            <div class="card">
+                <h3>Predicted CPU</h3>
+                <p id="predicted-cpu">--</p>
+            </div>
+
+        </section>
+
+
+        <!-- Anomaly -->
+        <section class="anomaly-card">
+
+            <h2>Anomaly Detection</h2>
+
+            <p id="anomaly">Start the dashboard to begin monitoring</p>
+
+            <p>
+                Anomaly Score:
+                <span id="anomaly-score">--</span>
+            </p>
+
+        </section>
+
+        <section class="alerts-card">
+            <div class="section-heading">
+                <h2>Alerts</h2>
+                <button id="clear-alerts" type="button">Clear Alerts</button>
+            </div>
+            <p id="alert-count">0 alerts</p>
+            <div id="alerts" aria-live="polite">
+                <p class="empty">No alerts yet.</p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
