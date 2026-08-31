@@ -1,53 +1,32 @@
-# =========================================================
-# STREAM ANALYTICS ENGINE - BACKEND
-# =========================================================
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Any
 
-# ---------------------------------------------------------
-# PROJECT IMPORTS
-# ---------------------------------------------------------
-
-from stream.data_generator import generate_data
-from core.memory_manager import MemoryManager
-from core.anomaly_detector import AnomalyDetector
-from core.predictor import Predictor
-from database.database import create_table, save_record
-from alerts.alert_manager import AlertManager
-from stream.data_generator import generate_data
-from core.memory_manager import MemoryManager
-
-# ---------------------------------------------------------
-# GEMINI
-# ---------------------------------------------------------
+from backend.stream.data_generator import generate_data
+from backend.core.memory_manager import MemoryManager
+from backend.core.anomaly_detector import AnomalyDetector
+from backend.core.predictor import Predictor
+from backend.database.database import create_table, save_record
+from backend.alerts.alert_manager import AlertManager
 
 from google import genai
-
-# ---------------------------------------------------------
-# ENVIRONMENT
-# ---------------------------------------------------------
+from dotenv import load_dotenv
 
 import os
-from dotenv import load_dotenv
 
 
 # =========================================================
-# LOAD ENVIRONMENT VARIABLES
+# ENVIRONMENT
 # =========================================================
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# You can change the model from .env later.
-# Example:
-# GEMINI_MODEL=gemini-2.5-flash
+# You can change this in Render Environment Variables.
 GEMINI_MODEL = os.getenv(
     "GEMINI_MODEL",
-    "gemini-2.5-flash"
+    "gemini-3.6-flash"
 )
 
 
@@ -59,17 +38,8 @@ print()
 print("========================================")
 print(" Stream Analytics Backend")
 print("========================================")
-
-print(
-    "Gemini key loaded:",
-    bool(GEMINI_API_KEY)
-)
-
-print(
-    "Gemini model:",
-    GEMINI_MODEL
-)
-
+print("Gemini key loaded:", bool(GEMINI_API_KEY))
+print("Gemini model:", GEMINI_MODEL)
 print("========================================")
 
 
@@ -116,16 +86,13 @@ memory_manager = MemoryManager(
     window_size=100
 )
 
-
 anomaly_detector = AnomalyDetector(
     threshold=2.5
 )
 
-
 predictor = Predictor(
     window_size=5
 )
-
 
 alert_manager = AlertManager()
 
@@ -136,11 +103,13 @@ alert_manager = AlertManager()
 
 app = FastAPI(
     title="Memory-Efficient Stream Analytics Engine",
+
     description=(
         "Real-time stream monitoring, "
         "prediction, anomaly detection and "
         "Gemini AI analysis."
     ),
+
     version="1.0.0"
 )
 
@@ -150,7 +119,6 @@ app = FastAPI(
 # =========================================================
 
 app.add_middleware(
-
     CORSMiddleware,
 
     allow_origins=[
@@ -215,6 +183,8 @@ def home():
 
     return {
 
+        "success": True,
+
         "message": "Backend running",
 
         "service": (
@@ -235,6 +205,8 @@ def home():
 def health():
 
     return {
+
+        "success": True,
 
         "status": "healthy",
 
@@ -291,6 +263,7 @@ def get_stream():
             for item in history
 
             if isinstance(item, dict)
+
             and "cpu" in item
 
         ]
@@ -321,21 +294,21 @@ def get_stream():
         # Add calculated values
         # -------------------------------------------------
 
-        data["predicted_cpu"] = (
+        data["predicted_cpu"] = float(
             predicted_cpu
         )
 
-        data["anomaly"] = (
-            bool(is_anomaly)
+        data["anomaly"] = bool(
+            is_anomaly
         )
 
-        data["anomaly_score"] = (
-            float(anomaly_score)
+        data["anomaly_score"] = float(
+            anomaly_score
         )
 
 
         # -------------------------------------------------
-        # Create alert if anomaly detected
+        # Create alert
         # -------------------------------------------------
 
         if is_anomaly:
@@ -371,10 +344,16 @@ def get_stream():
 
 
         # -------------------------------------------------
-        # Return live data
+        # Return data
         # -------------------------------------------------
 
-        return data
+        return {
+
+            "success": True,
+
+            **data
+
+        }
 
 
     except Exception as e:
@@ -541,17 +520,16 @@ def clear_alerts():
 # GEMINI AI ANALYSIS
 # =========================================================
 
-# =========================================================
-# GEMINI AI ANALYSIS
-# =========================================================
-
 @app.post("/ai-analysis")
-def ai_analysis(request: AIAnalysisRequest):
+def ai_analysis(
+    request: AIAnalysisRequest
+):
 
     print()
     print("========================================")
-    print("Gemini AI Analysis Request")
+    print(" Gemini AI Analysis Request")
     print("========================================")
+
 
     # -----------------------------------------------------
     # Check API key
@@ -560,9 +538,15 @@ def ai_analysis(request: AIAnalysisRequest):
     if not GEMINI_API_KEY:
 
         return {
+
             "success": False,
-            "message": "Gemini API key is not configured."
+
+            "message": (
+                "Gemini API key is not configured."
+            )
+
         }
+
 
     # -----------------------------------------------------
     # Check client
@@ -571,9 +555,15 @@ def ai_analysis(request: AIAnalysisRequest):
     if gemini_client is None:
 
         return {
+
             "success": False,
-            "message": "Gemini client is not initialized."
+
+            "message": (
+                "Gemini client is not initialized."
+            )
+
         }
+
 
     # -----------------------------------------------------
     # Create prompt
@@ -582,7 +572,7 @@ def ai_analysis(request: AIAnalysisRequest):
     prompt = f"""
 You are an intelligent system monitoring assistant.
 
-Analyze these real-time system metrics:
+Analyze the following real-time system metrics:
 
 CPU Usage: {request.cpu:.2f}%
 RAM Usage: {request.ram:.2f}%
@@ -591,7 +581,8 @@ Predicted CPU: {request.predicted_cpu:.2f}%
 Anomaly Detected: {request.anomaly}
 Anomaly Score: {request.anomaly_score:.2f}
 
-Create a concise professional monitoring report.
+Create a professional and easy-to-understand
+system monitoring report.
 
 Use exactly these sections:
 
@@ -600,21 +591,24 @@ Use exactly these sections:
 3. Possible Causes
 4. Recommended Action
 
-Explain:
-- CPU condition
-- RAM condition
-- Network condition
-- Predicted CPU
-- Anomaly status
-- Anomaly score
+Requirements:
 
-Do not claim that malware, hacking, or an attack exists
-unless the provided information proves it.
-Clearly separate observations from possible causes.
+- Explain the CPU condition.
+- Explain the RAM condition.
+- Explain the network condition.
+- Explain the predicted CPU.
+- Explain the anomaly status.
+- Explain the anomaly score.
+- Give practical troubleshooting recommendations.
+- Do not claim that hacking, malware, DoS,
+  crypto-mining, or an attack exists unless
+  the provided metrics actually prove it.
+- Clearly distinguish observations from possible causes.
 """
 
+
     # -----------------------------------------------------
-    # Call Gemini Interactions API
+    # Call Gemini
     # -----------------------------------------------------
 
     try:
@@ -623,32 +617,47 @@ Clearly separate observations from possible causes.
             f"Sending request to {GEMINI_MODEL}..."
         )
 
-        interaction = gemini_client.interactions.create(
 
-            model=GEMINI_MODEL,
-
-            input=prompt
-
+        response = (
+            gemini_client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt
+            )
         )
 
+
         # -------------------------------------------------
-        # Get AI output
+        # Read response
         # -------------------------------------------------
 
-        analysis = interaction.output_text
+        analysis = getattr(
+            response,
+            "text",
+            None
+        )
+
 
         if not analysis:
 
             return {
+
                 "success": False,
-                "message": "Gemini returned an empty response."
+
+                "message": (
+                    "Gemini returned an empty response."
+                ),
+
+                "model": GEMINI_MODEL
+
             }
+
 
         print(
             "Gemini analysis generated successfully."
         )
 
         print("========================================")
+
 
         return {
 
@@ -660,37 +669,19 @@ Clearly separate observations from possible causes.
 
         }
 
-    except Exception as e:
-
-        print()
-        print("========================================")
-        print("GEMINI AI ERROR")
-        print("========================================")
-        print(type(e).__name__)
-        print(str(e))
-        print("========================================")
-
-        return {
-
-            "success": False,
-
-            "message": str(e),
-
-            "model": GEMINI_MODEL
-
-        }
-
 
     except Exception as e:
 
         print()
         print("========================================")
-        print("GEMINI AI ERROR")
+        print(" GEMINI AI ERROR")
         print("========================================")
         print(
+            "Error type:",
             type(e).__name__
         )
         print(
+            "Error:",
             str(e)
         )
         print("========================================")
@@ -713,7 +704,7 @@ Clearly separate observations from possible causes.
 
 print()
 print("========================================")
-print("API routes loaded:")
+print(" API routes loaded:")
 print("========================================")
 
 print("GET     /")

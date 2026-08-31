@@ -22,3 +22,5 @@
 2026-09-01 00:00:01,200 - WARNING - Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
 2026-09-01 00:09:37,505 - WARNING - ALERT: Anomaly detected! CPU value: 96.51 | Value: 96.51
 2026-09-01 00:11:36,777 - WARNING - ALERT: Anomaly detected! CPU value: 93.47 | Value: 93.47
+2026-09-01 01:59:37,752 - WARNING - ALERT: Anomaly detected! CPU value: 91.18 | Value: 91.18
+2026-09-01 01:59:41,840 - WARNING - ALERT: Anomaly detected! CPU value: 95.65 | Value: 95.65
