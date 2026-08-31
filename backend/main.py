@@ -17,6 +17,8 @@ from core.anomaly_detector import AnomalyDetector
 from core.predictor import Predictor
 from database.database import create_table, save_record
 from alerts.alert_manager import AlertManager
+from stream.data_generator import generate_data
+from core.memory_manager import MemoryManager
 
 # ---------------------------------------------------------
 # GEMINI
