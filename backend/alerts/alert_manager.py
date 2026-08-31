@@ -1,22 +1,7 @@
 import logging
 from pathlib import Path
 
-from collections import deque
 
-
-class AlertManager:
-	def __init__(self, max_items=50):
-		self.alerts = deque(maxlen=max_items)
-
-	def record(self, event):
-		if event["is_anomaly"]:
-			alert = {"timestamp": event["timestamp"], "value": event["value"], "z_score": event["z_score"]}
-			self.alerts.appendleft(alert)
-			return alert
-		return None
-
-	def recent(self):
-		return list(self.alerts)
 # Get backend folder path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,33 +24,13 @@ logging.basicConfig(
 
 
 class AlertManager:
-
-    def create_alert(self, data):
-
-        if not data.get("anomaly"):
-            return None
-
-        alert = {
-            "message": "Anomaly detected!",
-            "timestamp": data["timestamp"],
-            "cpu": data["cpu"],
-            "anomaly_score": data["anomaly_score"]
-        }
-
-        logging.warning(
-            f"ANOMALY DETECTED | "
-            f"CPU: {data['cpu']} | "
-            f"Score: {data['anomaly_score']}"
-        )
-
-
-class AlertManager:
+    """Manages anomaly alerts for the stream analytics engine."""
 
     def __init__(self):
         self.alerts = []
 
     def add_alert(self, value, message):
-
+        """Add a new alert to the list."""
         alert = {
             "value": value,
             "message": message
@@ -73,8 +38,13 @@ class AlertManager:
 
         self.alerts.append(alert)
 
+        logging.warning(
+            f"ALERT: {message} | Value: {value}"
+        )
+
         return alert
 
     def get_alerts(self):
+        """Get all current alerts."""
         return self.alerts
       

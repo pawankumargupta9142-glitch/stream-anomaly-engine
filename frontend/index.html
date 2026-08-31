@@ -1,91 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Stream Analytics Dashboard</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>
+        Stream Analytics Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- Chart.js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
 </head>
+
 
 <body>
 
-    <header>
-        <h1>Memory-Efficient Stream Analytics Engine</h1>
-        <p>Real-Time Prediction & Anomaly Detection Dashboard</p>
-        <p id="health">Checking backend health...</p>
-        <a href="http://127.0.0.1:8000/" target="_blank" rel="noreferrer">Open backend status</a>
-    </header>
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="header-content">
+
+        <h1>
+            Memory-Efficient Stream Analytics Engine
+        </h1>
+
+        <p>
+            Real-Time Prediction &amp; Anomaly Detection Dashboard
+        </p>
+
+        <div class="header-info">
+
+            <span id="health">
+                Checking backend health...
+            </span>
+
+            <a
+                href="http://127.0.0.1:8000/docs"
+                target="_blank"
+                rel="noreferrer"
+            >
+                Open API Docs
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
 
 
-    <main>
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
-        <!-- Status -->
-        <div class="status-card">
-            <h2>System Status</h2>
-            <p id="status">Dashboard stopped</p>
-            <p id="dashboard-status">Dashboard stopped</p>
-            <button id="start-dashboard" type="button">Start</button>
-            <button id="stop-dashboard" type="button">Stop</button>
-            <button id="clear-history" type="button">Clear History</button>
+<main>
+
+
+    <!-- =================================================
+         SYSTEM STATUS
+    ================================================== -->
+
+    <section class="status-card">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    System Status
+                </h2>
+
+                <p id="status">
+                    Connecting...
+                </p>
+
+            </div>
+
+            <div
+                id="dashboard-status"
+                class="dashboard-badge stopped"
+            >
+                🔴 Dashboard Stopped
+            </div>
+
         </div>
 
 
-        <!-- Data Cards -->
-        <section class="cards">
+        <div class="control-buttons">
 
-            <div class="card">
-                <h3>CPU Usage</h3>
-                <p id="cpu">--</p>
-            </div>
-
-            <div class="card">
-                <h3>RAM Usage</h3>
-                <p id="ram">--</p>
-            </div>
-
-            <div class="card">
-                <h3>Network Usage</h3>
-                <p id="network">--</p>
-            </div>
-
-            <div class="card">
-                <h3>Predicted CPU</h3>
-                <p id="predicted-cpu">--</p>
-            </div>
-
-        </section>
+            <button
+                id="start-dashboard"
+                type="button"
+            >
+                ▶ Start
+            </button>
 
 
-        <!-- Anomaly -->
-        <section class="anomaly-card">
+            <button
+                id="stop-dashboard"
+                type="button"
+            >
+                ⏹ Stop
+            </button>
 
-            <h2>Anomaly Detection</h2>
 
-            <p id="anomaly">Start the dashboard to begin monitoring</p>
+            <button
+                id="clear-history"
+                type="button"
+            >
+                🧹 Clear History
+            </button>
 
-            <p>
-                Anomaly Score:
-                <span id="anomaly-score">--</span>
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         LIVE DATA CARDS
+    ================================================== -->
+
+    <section class="cards">
+
+
+        <div class="card cpu-card">
+
+            <h3>
+                CPU Usage
+            </h3>
+
+            <p id="cpu">
+                --
             </p>
 
-        </section>
+            <small>
+                Current CPU
+            </small>
 
-        <section class="alerts-card">
-            <div class="section-heading">
-                <h2>Alerts</h2>
-                <button id="clear-alerts" type="button">Clear Alerts</button>
+        </div>
+
+
+
+        <div class="card ram-card">
+
+            <h3>
+                RAM Usage
+            </h3>
+
+            <p id="ram">
+                --
+            </p>
+
+            <small>
+                Current RAM
+            </small>
+
+        </div>
+
+
+
+        <div class="card network-card">
+
+            <h3>
+                Network Usage
+            </h3>
+
+            <p id="network">
+                --
+            </p>
+
+            <small>
+                Current Network
+            </small>
+
+        </div>
+
+
+
+        <div class="card prediction-card">
+
+            <h3>
+                Predicted CPU
+            </h3>
+
+            <p id="predicted-cpu">
+                --
+            </p>
+
+            <small>
+                Next prediction
+            </small>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         LIVE CHART
+    ================================================== -->
+
+    <section class="chart-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📈 Live System Metrics
+                </h2>
+
+                <p>
+                    Real-time CPU, RAM and Network monitoring
+                </p>
+
             </div>
-            <p id="alert-count">0 alerts</p>
-            <div id="alerts" aria-live="polite">
-                <p class="empty">No alerts yet.</p>
+
+            <span id="chart-status">
+                Waiting...
+            </span>
+
+        </div>
+
+
+        <div class="chart-wrapper">
+
+            <canvas
+                id="system-chart"
+            ></canvas>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ANOMALY DETECTION
+    ================================================== -->
+
+    <section
+        id="anomaly-section"
+        class="anomaly-card"
+    >
+
+        <div>
+
+            <h2>
+                🚨 Anomaly Detection
+            </h2>
+
+            <p id="anomaly">
+                Checking...
+            </p>
+
+        </div>
+
+
+        <div class="anomaly-score-box">
+
+            <span>
+                Anomaly Score
+            </span>
+
+            <strong id="anomaly-score">
+                --
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         GEMINI AI
+    ================================================== -->
+
+    <section class="ai-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    🤖 Gemini AI Analysis
+                </h2>
+
+                <p>
+                    Analyze the latest system metrics using Gemini AI.
+                </p>
+
             </div>
-        </section>
 
-    </main>
+        </div>
 
 
-    <script src="script.js"></script>
+        <button
+            id="ai-analyze"
+            type="button"
+        >
+            🤖 Analyze Current Data
+        </button>
+
+
+        <p
+            id="ai-loading"
+            class="ai-loading"
+            style="display: none;"
+        >
+            🤖 Gemini is analyzing your system...
+        </p>
+
+
+        <div
+            id="ai-result"
+            class="ai-result"
+            aria-live="polite"
+        >
+            Start the dashboard and click
+            "Analyze Current Data".
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ALERTS
+    ================================================== -->
+
+    <section class="alerts-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    🚨 System Alerts
+                </h2>
+
+                <p>
+                    Detected anomalies and important events
+                </p>
+
+            </div>
+
+
+            <button
+                id="clear-alerts"
+                type="button"
+            >
+                🧹 Clear Alerts
+            </button>
+
+        </div>
+
+
+        <div class="alert-summary">
+
+            <strong id="alert-count">
+                0 alerts
+            </strong>
+
+        </div>
+
+
+        <div
+            id="alerts"
+            aria-live="polite"
+        >
+
+            <p class="empty">
+                No alerts yet.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+        Memory-Efficient Stream Analytics Engine
+    </p>
+
+    <p>
+        FastAPI • JavaScript • Chart.js • Gemini AI
+    </p>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
 </body>
+
 </html>
