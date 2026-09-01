@@ -8,7 +8,7 @@
 // CONFIGURATION
 // ======================
 const API_BASE_URL = "https://stream-anomaly-engine.onrender.com/";
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://stream-anomaly-engine.onrender.com/";
 
 
 // =====================================================
@@ -90,7 +90,7 @@ async function checkBackend() {
     try {
 
         const response =
-            await fetch(`${"http://127.0.0.1:8000/docs#/default/ai_analysis_ai_analysis_post"}/`);
+            await fetch(`${"https://stream-anomaly-engine.onrender.com/docs#/default/ai_analysis_ai_analysis_post"}/`);
 
         if (!response.ok) {
 
@@ -130,7 +130,7 @@ async function checkHealth() {
     try {
 
         const response =
-            await fetch(`${"http://127.0.0.1:8000"}/health`);
+            await fetch(`${"https://stream-anomaly-engine.onrender.com/"}/health`);
 
         if (!response.ok) {
 
@@ -421,7 +421,7 @@ async function getStreamData() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000"}/stream`
+                `${"https://stream-anomaly-engine.onrender.com/"}/stream`
             );
 
 
@@ -751,7 +751,7 @@ async function getHistory() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000"}/history`
+                `${"https://stream-anomaly-engine.onrender.com/"}/history`
             );
 
 
@@ -807,7 +807,7 @@ async function clearHistory() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000"}/history`,
+                `${"https://stream-anomaly-engine.onrender.com/"}/history`,
                 {
                     method: "DELETE"
                 }
@@ -903,7 +903,7 @@ async function getAlerts() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000"}/alerts`
+                `${"https://stream-anomaly-engine.onrender.com/"}/alerts`
             );
 
 
@@ -1060,7 +1060,7 @@ async function clearAlerts() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000"}/alerts`,
+                `${"https://stream-anomaly-engine.onrender.com/"}/alerts`,
                 {
                     method: "DELETE"
                 }
@@ -1492,7 +1492,7 @@ aiButton.addEventListener("click", async () => {
 
 
         const response = await fetch(
-            "http://127.0.0.1:8000",
+            "https://stream-anomaly-engine.onrender.com/",
             {
                 method: "POST",
 

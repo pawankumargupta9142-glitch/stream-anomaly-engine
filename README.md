@@ -9,4 +9,4 @@
  python main.py
  ```
 
- Open http://127.0.0.1:8000. The API provides `/api/health`, `/api/next`, `/api/stream`, and `/api/alerts`. To submit a custom value, send JSON to `/api/stream`, for example `{"value": 120}`.
+ Open https://stream-anomaly-engine.onrender.com/. The API provides `/api/health`, `/api/next`, `/api/stream`, and `/api/alerts`. To submit a custom value, send JSON to `/api/stream`, for example `{"value": 120}`.
