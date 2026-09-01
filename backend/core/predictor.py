@@ -5,8 +5,14 @@ class Predictor:
 
     def predict(self, values):
 
+        # Not enough history yet.
+        # Return the current average instead of None.
+        if not values:
+            return 0.0
+
         if len(values) < self.window_size:
-            return None
+            prediction = sum(values) / len(values)
+            return round(prediction, 2)
 
         recent_values = values[-self.window_size:]
 
