@@ -6,8 +6,8 @@
 
 // =====================================================
 // CONFIGURATION
-// =====================================================
-
+// ======================
+const API_BASE_URL = "https://stream-anomaly-engine.onrender.com/";
 const API_URL = "http://127.0.0.1:8000";
 
 
@@ -90,7 +90,7 @@ async function checkBackend() {
     try {
 
         const response =
-            await fetch(`${API_URL}/`);
+            await fetch(`${"http://127.0.0.1:8000/docs#/default/ai_analysis_ai_analysis_post"}/`);
 
         if (!response.ok) {
 
@@ -130,7 +130,7 @@ async function checkHealth() {
     try {
 
         const response =
-            await fetch(`${API_URL}/health`);
+            await fetch(`${"http://127.0.0.1:8000/health"}/health`);
 
         if (!response.ok) {
 
@@ -421,7 +421,7 @@ async function getStreamData() {
 
         const response =
             await fetch(
-                `${API_URL}/stream`
+                `${"http://127.0.0.1:8000/stream"}/stream`
             );
 
 
@@ -751,7 +751,7 @@ async function getHistory() {
 
         const response =
             await fetch(
-                `${API_URL}/history`
+                `${"http://127.0.0.1:8000/history"}/history`
             );
 
 
@@ -807,7 +807,7 @@ async function clearHistory() {
 
         const response =
             await fetch(
-                `${API_URL}/history`,
+                `${"http://127.0.0.1:8000/history"}/history`,
                 {
                     method: "DELETE"
                 }
@@ -903,7 +903,7 @@ async function getAlerts() {
 
         const response =
             await fetch(
-                `${API_URL}/alerts`
+                `${"http://127.0.0.1:8000/alerts"}/alerts`
             );
 
 
@@ -1060,7 +1060,7 @@ async function clearAlerts() {
 
         const response =
             await fetch(
-                `${API_URL}/alerts`,
+                `${"http://127.0.0.1:8000/alerts"}/alerts`,
                 {
                     method: "DELETE"
                 }
@@ -1190,7 +1190,7 @@ async function analyzeWithGemini() {
 
         const response =
             await fetch(
-                `${API_URL}/ai-analysis`,
+                `${"https://stream-anomaly-engine.onrender.com/"}/ai-analysis`,
                 {
 
                     method: "POST",
