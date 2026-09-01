@@ -7,8 +7,8 @@
 // =====================================================
 // CONFIGURATION
 // ======================
-const API_BASE_URL = "https://stream-anomaly-engine.onrender.com/";
-const API_URL = "https://stream-anomaly-engine.onrender.com/";
+const API_BASE_URL = "https://stream-anomaly-engine.onrender.com";
+const API_URL = "https://stream-anomaly-engine.onrender.com";
 
 
 // =====================================================
@@ -90,7 +90,27 @@ async function checkBackend() {
     try {
 
         const response =
-            await fetch(`${"https://stream-anomaly-engine.onrender.com/docs#/default/ai_analysis_ai_analysis_post"}/`);
+            await fetch(
+                "https://stream-anomaly-engine.onrender.com/ai-analysis",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        cpu: parseFloat(document.getElementById("cpu").textContent) || 0,
+                        ram: parseFloat(document.getElementById("ram").textContent) || 0,
+                        network: parseFloat(document.getElementById("network").textContent) || 0,
+                        predicted_cpu: parseFloat(document.getElementById("predicted-cpu").textContent) || 0,
+                        anomaly: document.getElementById("anomaly").textContent
+                            .toLowerCase()
+                            .includes("anomaly"),
+                        anomaly_score: parseFloat(
+                            document.getElementById("anomaly-score").textContent
+                        ) || 0
+                    })
+                }
+            );
 
         if (!response.ok) {
 
@@ -103,18 +123,14 @@ async function checkBackend() {
         const data =
             await response.json();
 
-        console.log("Backend:", data);
-
-        return true;
+        console.log("Gemini response:", data);
 
     } catch (error) {
 
         console.error(
-            "Backend Error:",
+            "Gemini AI Error:",
             error
         );
-
-        return false;
 
     }
 
@@ -402,7 +418,7 @@ function updateAnomalyUI(data) {
 
             ? Number(
                 data.anomaly_score
-              ).toFixed(2)
+            ).toFixed(2)
 
             : "--"
     );
@@ -987,7 +1003,7 @@ async function getAlerts() {
                         alertData.value != null
                             ? Number(
                                 alertData.value
-                              ).toFixed(2)
+                            ).toFixed(2)
                             : "--";
 
 
@@ -998,9 +1014,9 @@ async function getAlerts() {
 
                         <p>
                             ${escapeHTML(
-                                alertData.message ||
-                                "Anomaly detected"
-                            )}
+                        alertData.message ||
+                        "Anomaly detected"
+                    )}
                         </p>
 
                         <span>
@@ -1250,9 +1266,8 @@ async function analyzeWithGemini() {
             if (result) {
 
                 result.textContent =
-                    `❌ Gemini Error:\n\n${
-                        data.message ||
-                        "Unknown AI error"
+                    `❌ Gemini Error:\n\n${data.message ||
+                    "Unknown AI error"
                     }`;
 
             }
