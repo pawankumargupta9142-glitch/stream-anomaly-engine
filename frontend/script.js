@@ -130,7 +130,7 @@ async function checkHealth() {
     try {
 
         const response =
-            await fetch(`${"https://stream-anomaly-engine.onrender.com/"}/health`);
+            await fetch(`${"https://stream-anomaly-engine.onrender.com"}/health`);
 
         if (!response.ok) {
 
@@ -421,7 +421,7 @@ async function getStreamData() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/stream`
+                `${"https://stream-anomaly-engine.onrender.com"}/stream`
             );
 
 
@@ -751,7 +751,7 @@ async function getHistory() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/history`
+                `${"https://stream-anomaly-engine.onrender.com"}/history`
             );
 
 
@@ -807,7 +807,7 @@ async function clearHistory() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/history`,
+                `${"https://stream-anomaly-engine.onrender.com"}/history`,
                 {
                     method: "DELETE"
                 }
@@ -903,7 +903,7 @@ async function getAlerts() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/alerts`
+                `${"https://stream-anomaly-engine.onrender.com"}/alerts`
             );
 
 
@@ -1060,7 +1060,7 @@ async function clearAlerts() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/alerts`,
+                `${"https://stream-anomaly-engine.onrender.com"}/alerts`,
                 {
                     method: "DELETE"
                 }
@@ -1190,7 +1190,7 @@ async function analyzeWithGemini() {
 
         const response =
             await fetch(
-                `${"https://stream-anomaly-engine.onrender.com/"}/ai-analysis`,
+                `${"https://stream-anomaly-engine.onrender.com"}/ai-analysis`,
                 {
 
                     method: "POST",
