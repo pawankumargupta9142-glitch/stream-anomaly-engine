@@ -130,7 +130,7 @@ async function checkHealth() {
     try {
 
         const response =
-            await fetch(`${"http://127.0.0.1:8000/health"}/health`);
+            await fetch(`${"http://127.0.0.1:8000"}/health`);
 
         if (!response.ok) {
 
@@ -421,7 +421,7 @@ async function getStreamData() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000/stream"}/stream`
+                `${"http://127.0.0.1:8000"}/stream`
             );
 
 
@@ -751,7 +751,7 @@ async function getHistory() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000/history"}/history`
+                `${"http://127.0.0.1:8000"}/history`
             );
 
 
@@ -807,7 +807,7 @@ async function clearHistory() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000/history"}/history`,
+                `${"http://127.0.0.1:8000"}/history`,
                 {
                     method: "DELETE"
                 }
@@ -903,7 +903,7 @@ async function getAlerts() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000/alerts"}/alerts`
+                `${"http://127.0.0.1:8000"}/alerts`
             );
 
 
@@ -1060,7 +1060,7 @@ async function clearAlerts() {
 
         const response =
             await fetch(
-                `${"http://127.0.0.1:8000/alerts"}/alerts`,
+                `${"http://127.0.0.1:8000"}/alerts`,
                 {
                     method: "DELETE"
                 }
@@ -1492,7 +1492,7 @@ aiButton.addEventListener("click", async () => {
 
 
         const response = await fetch(
-            "http://127.0.0.1:8000/ai-analysis",
+            "http://127.0.0.1:8000",
             {
                 method: "POST",
 
